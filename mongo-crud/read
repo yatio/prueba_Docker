@@ -1,0 +1,49 @@
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://mongo:27017/yatio-prueba";
+
+//encuentra el primeron de la lista
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb");
+  dbo.collection("customers").findOne({}, function(err, result) {
+    if (err) throw err;
+    console.log(result.name);
+    db.close();
+  });
+}); 
+
+
+//ensetodos los datos de esa tabla
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb");
+  dbo.collection("customers").find({}).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    db.close();
+  });
+}); 
+
+
+//ensea algunos datos en este caso los nombres y el adress sin el _id
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb");
+  dbo.collection("customers").find({}, { projection: { _id: 0, name: 1, address: 1 } }).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    db.close();
+  });
+}); 
+
+//este me ense~a que puedo hacer cogido de data como yo lo quiera(ej. result[2].name para que me de el nombre del 2
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb");
+  dbo.collection("customers").find({}, { projection: { _id: 0, name: 1, address: 1 } }).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result[2].name);
+    db.close();
+  });
+}); 
+
